@@ -1,2 +1,79 @@
-# Credit-Card-Transaction-Monitoring-System
-A Credit Card Transaction Monitoring System (CCTMS) is a solution designed to track, analyze, and manage credit card transactions in real time. It ensures secure, efficient, and compliant processing of financial activities by identifying unusual patterns, mitigating risks, and providing actionable insights.
+# CreditCardTransactionMonitor
+Credit Card Transaction Monitor is an example of a Modern Data Application running on the Hortonworks Connected Platform (HDP/HDF). The application shows how a financial institution can use Hortonworks Data Flow and Hortonworks Data Platform to protect credit card customers from credit card fraud.
+
+# Install CreditCardTransactionMonitor
+Download and Import Hortonworks Sandbox 2.4 for Virtual Box. Should work with VMWare but has not been tested. Modify local hosts file so that sandbox.hortonworks.com resolves to 127.0.0.1 (This is important and may break the simulator and UI) 
+
+Configure Virtual Box Port Forward
+
+8082 – HDF_HTTP_Ingest
+
+8090 - TransactionMonitorUI
+
+8091 - Cometd
+
+9090 – HDF_Studio
+
+Start Sandbox, SSH to Sandbox (ssh root@sandbox.hortonworks.com -p 2222)
+
+Wait for Sandbox to fully boot up, all service need to finish starting
+
+Change Ambari password to "admin" (ambari-admin-password-reset)
+ 
+(!!!!!!!!!!!!!AMBARI PASSWORD MUST BE SET TO "admin" (no quotes)!!!!!!)
+
+cd /root (use the /root directory to begin the install)
+
+git clone https://github.com/vakshorton/CreditCardTransactionMonitor.git 
+
+(make sure that git cloned to /root/CreditCardTransactionMonitor)
+
+cd CreditCardTransactionMonitor
+
+./install.sh
+
+Install script reboot once complete. This is required to refresh session configuration.
+
+Wait for Sandbox to fully reboot
+
+Log back in via SSH (ssh root@sandbox.hortonworks.com -p 2222)
+
+# Start Demo
+The script to start demo services should be located in the /root/CreditCardTransactionMonitor directory
+
+./startDemoServices.sh
+
+Slider will download the servlet (UI) docker containers from the docker hub so it may take a few minutes for the application server to start
+
+Bring up the UI in a Browser: http://sandbox.hortonworks.com:8090/TransactionMonitorUI/CustomerOverview
+
+Start Simulation:
+
+The Simulator should be located in the CreditCardTransactionMonitor directory
+
+java -jar CreditCardTransactionSimulator-0.0.1-SNAPSHOT-jar-with-dependencies.jar Customer 1000 Simulation
+
+USAGE:
+
+java -jar simulator.jar arg1=Simulator-Type{Customer} arg2=EntityId{1000} arg3={Simulation|Training}
+
+Example:
+
+java -jar CreditCardTransactionSimulator-0.0.1-SNAPSHOT-jar-with-dependencies.jar Customer 1000 Simulation
+
+# Transaction Monitor UI
+
+The first view is the Analyst Inbox. When transactions start coming through from the generator, the Inbox will start to fill up. 
+Single click on one fo the transactions to see a preview of the transaction statistics and reason for being flagged.
+
+Double Click on the transaction to explore it in detail in the context of the customer's profile.
+
+![Alt text](/screenshot/TransactionMonitorScreenShot.png "MapUI")
+
+# Customer Mobile App
+
+Follow instructions in the CreditCardTransactionMonitorMobileApp Repo:
+
+https://github.com/vakshorton/CreditCardTransactionMonitorMobileApp
+
+
